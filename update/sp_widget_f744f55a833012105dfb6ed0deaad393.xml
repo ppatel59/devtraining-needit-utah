@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function ($scope) {
+
+	$scope.$watch('page.field.value', function(nv, ov) {
+		$scope.error = false;
+		if (!nv)
+			return; 
+
+		$scope.error = isNaN($scope.page.field.value);
+	})
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>input.currency {
+  text-align: right; 
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>my_current_widget</id>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>My Current Widget</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+	var single_currency = (gs.getProperty('glide.i18n.single_currency') == 'true');
+	var single_currency_code = '';
+	
+	if (single_currency) 
+		single_currency_code = gs.getProperty('glide.i18n.single_currency.code') || '';
+	
+	var csym = {};
+	csym.usd = {symbol: "$", location: "prefix"};
+	csym.cad = {symbol: "$", location: "prefix"};
+	csym.mxn = {symbol: "$", location: "prefix"};
+	csym.eur = {symbol: "€", location: "prefix"};
+	csym.gbp = {symbol: "£", location: "prefix"};
+	
+	var locale = GlideLocale.get();
+	var cc = '';
+	if (single_currency_code != '')
+		cc = data.symbol = single_currency_code;
+	else
+		cc = data.symbol = locale.getCurrencyCode();
+	
+	cc = cc.toLowerCase();
+	data.cc = cc;
+	locale.getCurrencyCode();
+	if (csym[cc]) 
+		data.symbol = csym[cc].symbol;
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2024-09-24 15:40:25</sys_created_on>
+        <sys_id>f744f55a833012105dfb6ed0deaad393</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>My Current Widget</sys_name>
+        <sys_package display_value="NeedIt" source="x_58872_needit">6ead8e780f603200cd674f8ce1050ed1</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="NeedIt">6ead8e780f603200cd674f8ce1050ed1</sys_scope>
+        <sys_update_name>sp_widget_f744f55a833012105dfb6ed0deaad393</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2024-09-24 15:40:25</sys_updated_on>
+        <template><![CDATA[<div class="row">
+  <div class="col-md-2">
+    <span class="input-group">
+      <span class="input-group-addon">{{data.symbol}}</span>
+      <input type="text" ng-model="page.fieldValue" ng-model-options="{getterSetter: true}" class="form-control currency" id="sp_formfield_{{::page.field.name}}" aria-required="{{page.field.isMandatory()}}" ng-attr-aria-invalid="{{page.field.isInvalid || error || undefined}}" />
+    </span>
+  </div>
+  <div class="col-md-10">
+    <div ng-if="error" class="alert alert-danger" role="alert">${Has to be a number}</div>
+  </div>
+</div>]]></template>
+    </sp_widget>
+</record_update>
